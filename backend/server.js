@@ -45,6 +45,24 @@ app.get("/:id", (req, res) => {
   });
 });
 
+app.post("/:id", (req, res) => {
+  const id = req.params.id;
+  Todo.findById(id, (err, todo) => {
+    if (!todo) {
+      res.status(404).send("Todo not found");
+    } else {
+      todo.text = req.body.text;
+
+      todo
+        .save()
+        .then((todo) => {
+          res.json(todo);
+        })
+        .catch((err) => res.status(500).send(err.message));
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });
